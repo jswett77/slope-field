@@ -13,7 +13,7 @@ boolean debug = false;
 int randomNoise = 33;
 
 // Flowfield object
-FlowField flowfield;
+FlowField theFlow;
 
 // An ArrayList of vehicles
 ArrayList<Vehicle> vehicles;
@@ -23,8 +23,8 @@ void setup() {
   //fullScreen();
 
   // Make a new flow field with "resolution" of 16
-  flowfield = new FlowField(30);
-  flowfield.init();
+  theFlow = new FlowField(30);
+  theFlow.init();
   vehicles = new ArrayList<Vehicle>();
   // Make a whole bunch of vehicles with random maxspeed and maxforce values
   for (int i = 0; i < 220; i++) {
@@ -34,11 +34,11 @@ void setup() {
 
 void draw() {
   background(255);
-  // Display the flowfield in "debug" mode
-  if (debug) flowfield.display();
+  // Display the theFlow in "debug" mode
+  if (debug) theFlow.display();
   // Tell all the vehicles to follow the flow field
   for (Vehicle v : vehicles) {
-    v.follow(flowfield);
+    v.follow(theFlow);
     v.run();
   }
 
@@ -54,10 +54,10 @@ void keyPressed() {
   }
 }
 
-// Make a new flowfield
+// Make a new theFlow
 void mousePressed() {
-  flowfield.init();
-  //flowfield = new FlowField(20);
+  theFlow.init();
+  //theFlow = new FlowField(20);
 }
 
 // The Nature of Code
@@ -81,10 +81,10 @@ class FlowField {
     field = new PVector[cols][rows];    
   }
 
-  void init() {
+  public void init() {
     // Reseed noise so we get a new flow field every time
     randomNoise += 23;
-    
+    noiseSeed((int)random(10000));
     
     float xoff = 0;
     for (int i = 0; i < cols; i++) {
