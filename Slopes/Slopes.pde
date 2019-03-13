@@ -18,12 +18,12 @@ FlowField theFlow;
 // An ArrayList of vehicles
 ArrayList<Vehicle> vehicles;
 
-int DEFAULT_RES = 20;
+int DEFAULT_RES = 35;
 
 int N_SEED = 0;
 
 void setup() {
-  size(680, 460);
+  size(800, 460);
   //fullScreen();
 
   // Make a new flow field with "resolution" of 16
@@ -232,4 +232,3 @@ class Vehicle {
     if (position.y > height+r) position.y = -r;
   }
 }
-
