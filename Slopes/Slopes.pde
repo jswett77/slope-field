@@ -24,6 +24,7 @@ void setup() {
 
   // Make a new flow field with "resolution" of 16
   flowfield = new FlowField(30);
+  flowfield.init();
   vehicles = new ArrayList<Vehicle>();
   // Make a whole bunch of vehicles with random maxspeed and maxforce values
   for (int i = 0; i < 220; i++) {
@@ -77,8 +78,7 @@ class FlowField {
     // Determine the number of columns and rows based on sketch's width and height
     cols = width/resolution;
     rows = height/resolution;
-    field = new PVector[cols][rows];
-    init();
+    field = new PVector[cols][rows];    
   }
 
   void init() {
