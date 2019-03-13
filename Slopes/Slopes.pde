@@ -34,17 +34,13 @@ void setup() {
 
 void draw() {
   background(255);
-  // Display the theFlow in "debug" mode
+  //// Display the theFlow in "debug" mode
   if (debug) theFlow.display();
   // Tell all the vehicles to follow the flow field
   for (Vehicle v : vehicles) {
     v.follow(theFlow);
-    v.run();
+      v.run();
   }
-
-  // Instructions
-  fill(0);
-  //text("Hit space bar to toggle debugging lines.\nClick the mouse to generate a new flow field.",10,height-20);
 }
 
 
@@ -69,30 +65,37 @@ void mousePressed() {
 class FlowField {
 
   // A flow field is a two dimensional array of PVectors
-  PVector[][] field;
+  PVector[][] forceField;
   int cols, rows; // Columns and Rows
   int resolution; // How large is each "cell" of the flow field
 
   FlowField(int r) {
+    super();
     resolution = r;
     // Determine the number of columns and rows based on sketch's width and height
     cols = width/resolution;
     rows = height/resolution;
-    field = new PVector[cols][rows];    
+    this.forceField = new PVector[cols][rows];
   }
 
   public void init() {
     // Reseed noise so we get a new flow field every time
     randomNoise += 23;
     noiseSeed((int)random(10000));
-    
+
+
     float xoff = 0;
-    for (int i = 0; i < cols; i++) {
+    for (int i = 0; i < forceField.length; i++) {
       float yoff = 0;
-      for (int j = 0; j < rows; j++) {
-        float theta = map(noise(xoff+0.01,yoff+0.01,1),0,1,0,TWO_PI);
+
+      for (int j = 0; j < forceField[0].length; j++) {
+        float theta = map(noise(xoff+0.01, yoff+0.01, 1), 0, 1, 0, TWO_PI);
         // Polar to cartesian coordinate transformation to get x and y components of the vector
-        field[i][j] = new PVector(cos(theta),sin(theta));
+        PVector vTemp = new PVector(cos(theta), sin(theta));
+        PVector[] row = this.forceField[i]; 
+        row[j] = vTemp;
+
+        this.forceField[i][j] = vTemp; 
         yoff += 0.1;
       }
       xoff += 0.1;
@@ -101,12 +104,11 @@ class FlowField {
 
   // Draw every vector
   void display() {
-    for (int i = 0; i < cols; i++) {
-      for (int j = 0; j < rows; j++) {
-        drawVector(field[i][j],i*resolution,j*resolution,resolution-2);
+    for (int i = 0; i < forceField[0].length; i++) {
+      for (int j = 0; j < forceField.length; j++) {
+        drawVector(forceField[i][j], i*resolution, j*resolution, resolution-2);
       }
     }
-
   }
 
   // Renders a vector object 'v' as an arrow and a position 'x,y'
@@ -114,26 +116,25 @@ class FlowField {
     pushMatrix();
     float arrowsize = 4;
     // Translate to position to render vector
-    translate(x,y);
-    stroke(0,100);
+    translate(x, y);
+    stroke(0, 100);
     // Call vector heading function to get direction (note that pointing to the right is a heading of 0) and rotate
     rotate(v.heading2D());
     // Calculate length of vector & scale it to be bigger or smaller if necessary
     float len = v.mag()*scayl;
     // Draw three lines to make an arrow (draw pointing up since we've rotate to the proper direction)
-    line(0,0,len,0);
+    line(0, 0, len, 0);
     //line(len,0,len-arrowsize,+arrowsize/2);
     //line(len,0,len-arrowsize,-arrowsize/2);
     popMatrix();
   }
 
   PVector lookup(PVector lookup) {
-    int column = int(constrain(lookup.x/resolution,0,cols-1));
-    int row = int(constrain(lookup.y/resolution,0,rows-1));
-    return field[column][row].get();
+    int column = int(constrain(lookup.x/resolution, 0, cols-1));
+    int row = int(constrain(lookup.y/resolution, 0, rows-1));
+    
+    return forceField[column][row].get();
   }
-
-
 }
 
 // The Nature of Code
@@ -152,13 +153,13 @@ class Vehicle {
   float maxforce;    // Maximum steering force
   float maxspeed;    // Maximum speed
 
-    Vehicle(PVector l, float ms, float mf) {
+  Vehicle(PVector l, float ms, float mf) {
     position = l.get();
     r = 3.0;
     maxspeed = ms;
     maxforce = mf;
-    acceleration = new PVector(0,0);
-    velocity = new PVector(0,0);
+    acceleration = new PVector(0, 0);
+    velocity = new PVector(0, 0);
   }
 
   public void run() {
@@ -170,7 +171,7 @@ class Vehicle {
 
   // Implementing Reynolds' flow field following algorithm
   // http://www.red3d.com/cwr/steer/FlowFollow.html
-    void follow(FlowField flow) {
+  void follow(FlowField flow) {
     // What is the vector at that spot in the flow field?
     PVector desired = flow.lookup(position);
     // Scale it up by maxspeed
@@ -203,7 +204,7 @@ class Vehicle {
     fill(175);
     stroke(0);
     pushMatrix();
-    translate(position.x,position.y);
+    translate(position.x, position.y);
     rotate(theta);
     beginShape(TRIANGLES);
     vertex(0, -r*2);
