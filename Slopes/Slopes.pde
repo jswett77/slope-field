@@ -8,7 +8,7 @@
 // Via Reynolds: http://www.red3d.com/cwr/steer/FlowFollow.html
 
 // Using this variable to decide whether to draw all the stuff
-boolean debug = false;
+boolean debug = true;
 
 int randomNoise = 33;
 
@@ -18,12 +18,14 @@ FlowField theFlow;
 // An ArrayList of vehicles
 ArrayList<Vehicle> vehicles;
 
+int DEFAULT_RES = 30;
+
 void setup() {
   size(680, 460);
   //fullScreen();
 
   // Make a new flow field with "resolution" of 16
-  theFlow = new FlowField(30);
+  theFlow = new FlowField(DEFAULT_RES);
   theFlow.init();
   vehicles = new ArrayList<Vehicle>();
   // Make a whole bunch of vehicles with random maxspeed and maxforce values
@@ -39,7 +41,7 @@ void draw() {
   // Tell all the vehicles to follow the flow field
   for (Vehicle v : vehicles) {
     v.follow(theFlow);
-      v.run();
+    v.run();
   }
 }
 
@@ -53,7 +55,9 @@ void keyPressed() {
 // Make a new theFlow
 void mousePressed() {
   theFlow.init();
-  //theFlow = new FlowField(20);
+  theFlow = new FlowField(DEFAULT_RES);
+  theFlow.init();
+  //  console.log("mouse pressed");
 }
 
 // The Nature of Code
@@ -104,8 +108,8 @@ class FlowField {
 
   // Draw every vector
   void display() {
-    for (int i = 0; i < forceField[0].length; i++) {
-      for (int j = 0; j < forceField.length; j++) {
+    for (int i = 0; i < forceField.length; i++) {
+      for (int j = 0; j < forceField[0].length; j++) {
         drawVector(forceField[i][j], i*resolution, j*resolution, resolution-2);
       }
     }
@@ -113,6 +117,8 @@ class FlowField {
 
   // Renders a vector object 'v' as an arrow and a position 'x,y'
   void drawVector(PVector v, float x, float y, float scayl) {
+    if (v==null)
+      return;
     pushMatrix();
     float arrowsize = 4;
     // Translate to position to render vector
@@ -132,7 +138,7 @@ class FlowField {
   PVector lookup(PVector lookup) {
     int column = int(constrain(lookup.x/resolution, 0, cols-1));
     int row = int(constrain(lookup.y/resolution, 0, rows-1));
-    
+
     return forceField[column][row].get();
   }
 }
