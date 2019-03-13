@@ -18,7 +18,9 @@ FlowField theFlow;
 // An ArrayList of vehicles
 ArrayList<Vehicle> vehicles;
 
-int DEFAULT_RES = 30;
+int DEFAULT_RES = 20;
+
+int N_SEED = 0;
 
 void setup() {
   size(680, 460);
@@ -54,10 +56,12 @@ void keyPressed() {
 
 // Make a new theFlow
 void mousePressed() {
+  N_SEED+=5;
   theFlow.init();
-  theFlow = new FlowField(DEFAULT_RES);
-  theFlow.init();
+  //theFlow = new FlowField(DEFAULT_RES);
+  //theFlow.init();
   //  console.log("mouse pressed");
+  
 }
 
 // The Nature of Code
@@ -85,7 +89,7 @@ class FlowField {
   public void init() {
     // Reseed noise so we get a new flow field every time
     randomNoise += 23;
-    noiseSeed((int)random(10000));
+    noiseSeed(millis());
 
 
     float xoff = 0;
@@ -93,7 +97,7 @@ class FlowField {
       float yoff = 0;
 
       for (int j = 0; j < forceField[0].length; j++) {
-        float theta = map(noise(xoff+0.01, yoff+0.01, 1), 0, 1, 0, TWO_PI);
+        float theta = map(noise(xoff+0.01+N_SEED, yoff+0.01+N_SEED, 1), 0, 1, 0, TWO_PI);
         // Polar to cartesian coordinate transformation to get x and y components of the vector
         PVector vTemp = new PVector(cos(theta), sin(theta));
         PVector[] row = this.forceField[i]; 
@@ -228,3 +232,4 @@ class Vehicle {
     if (position.y > height+r) position.y = -r;
   }
 }
+
