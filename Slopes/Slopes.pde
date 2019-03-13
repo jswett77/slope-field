@@ -22,6 +22,8 @@ int DEFAULT_RES = 35;
 
 int N_SEED = 0;
 
+int NUM_CARS = 100;
+
 void setup() {
   size(800, 460);
   //fullScreen();
@@ -31,7 +33,7 @@ void setup() {
   theFlow.init();
   vehicles = new ArrayList<Vehicle>();
   // Make a whole bunch of vehicles with random maxspeed and maxforce values
-  for (int i = 0; i < 220; i++) {
+  for (int i = 0; i < NUM_CARS; i++) {
     vehicles.add(new Vehicle(new PVector(random(width), random(height)), random(2, 5), random(0.1, 0.5)));
   }
 }
