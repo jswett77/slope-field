@@ -14,11 +14,12 @@ int randomNoise = 33;
 
 // Flowfield object
 FlowField flowfield;
+
 // An ArrayList of vehicles
 ArrayList<Vehicle> vehicles;
 
 void setup() {
-  size(880, 1060);
+  size(680, 460);
   //fullScreen();
 
   // Make a new flow field with "resolution" of 16
@@ -83,7 +84,7 @@ class FlowField {
   void init() {
     // Reseed noise so we get a new flow field every time
     randomNoise += 23;
-    noiseSeed((int)random(10000));
+    
     
     float xoff = 0;
     for (int i = 0; i < cols; i++) {
