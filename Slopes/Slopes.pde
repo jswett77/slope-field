@@ -18,11 +18,11 @@ FlowField theFlow;
 // An ArrayList of vehicles
 ArrayList<Vehicle> vehicles;
 
-int DEFAULT_RES = 35;
+int DEFAULT_RES = 25;
 
 int N_SEED = 0;
 
-int NUM_CARS = 100;
+int NUM_CARS = 50;
 
 void setup() {
   size(800, 460);
@@ -164,6 +164,7 @@ class Vehicle {
   float r;
   float maxforce;    // Maximum steering force
   float maxspeed;    // Maximum speed
+  int cOffset;
 
   Vehicle(PVector l, float ms, float mf) {
     position = l.get();
@@ -172,6 +173,7 @@ class Vehicle {
     maxforce = mf;
     acceleration = new PVector(0, 0);
     velocity = new PVector(0, 0);
+    cOffset = (int)random(50500);
   }
 
   public void run() {
@@ -213,16 +215,17 @@ class Vehicle {
   void display() {
     // Draw a triangle rotated in the direction of velocity
     float theta = velocity.heading2D() + radians(90);
-    fill(175);
+    fill(#B4C7F5+cOffset);
     stroke(0);
     pushMatrix();
     translate(position.x, position.y);
     rotate(theta);
-    beginShape(TRIANGLES);
-    vertex(0, -r*2);
-    vertex(-r, r*2);
-    vertex(r, r*2);
-    endShape();
+    circle(0,0,4*r);
+    //beginShape(TRIANGLES);
+    //vertex(0, -r*3);
+    //vertex(-r, r*3);
+    //vertex(r, r*3);
+    //endShape();
     popMatrix();
   }
 
