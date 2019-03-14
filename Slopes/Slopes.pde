@@ -220,7 +220,7 @@ class Vehicle {
     pushMatrix();
     translate(position.x, position.y);
     rotate(theta);
-    circle(0,0,4*r);
+    ellipse(0,0,4*r,3.5*r);
     //beginShape(TRIANGLES);
     //vertex(0, -r*3);
     //vertex(-r, r*3);
