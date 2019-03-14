@@ -27,7 +27,7 @@ int NUM_CARS = 50;
 void setup() {
   size(800, 460);
   //fullScreen();
-
+  N_SEED = (int)random(230);
   // Make a new flow field with "resolution" of 16
   theFlow = new FlowField(DEFAULT_RES);
   theFlow.init();
