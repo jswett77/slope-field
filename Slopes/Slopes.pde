@@ -25,7 +25,7 @@ int N_SEED = 0;
 int NUM_CARS = 50;
 
 void setup() {
-  size(800, 460);
+  size(1000, 480);
   //fullScreen();
   N_SEED = (int)random(230);
   // Make a new flow field with "resolution" of 16
